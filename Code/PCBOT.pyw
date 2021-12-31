@@ -9,8 +9,8 @@ screenshot_channel = ""
 command_channel = ""
 guild_id = ""
 location = "./"
-if "Code/PCBOT.py" in (sys.argv[0]).replace("\\", "/"):
-    location = (sys.argv[0].replace("\\", "/")).replace("Code/PCBOT.py" , "")
+if "Code/PCBOT.pyw" in (sys.argv[0]).replace("\\", "/"):
+    location = (sys.argv[0].replace("\\", "/")).replace("Code/PCBOT.pyw" , "")
 
 with open(f"{location}data/guild_id.txt" , "r") as file:
     guild_id = file.read()
