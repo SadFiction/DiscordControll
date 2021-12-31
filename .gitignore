@@ -3,9 +3,13 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# C extensions
+# C extensionss
 *.so
-
+#ignore data files
+token.txt
+guild_id.txt
+command_channel_id.txt
+screenshot_channel_id.txt
 # Distribution / packaging
 .Python
 build/
