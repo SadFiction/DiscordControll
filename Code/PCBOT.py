@@ -1,4 +1,5 @@
 import os
+import discord
 from discord.ext import commands
 import asyncio
 import sys
@@ -55,6 +56,44 @@ async def state(ctx, option : str, * , time_sec : int = None):
     
 @state.error
 async def state_error(ctx, error):
+    ctx.respond(f"ERROR: ```\n {error} \n```")
+
+@client.slash_command(guild_ids=[int(guild_id)], name= "screenshot", descriptSion = "get's a random screenshot")
+async def screenshot(ctx, other : str = None):
+    import RandomScreenshotGetter
+    import os
+    if str(ctx.channel.id) == screenshot_channel:
+        running = None
+        if other is None:
+            running = True
+
+        elif other.lower() == "help":
+            await ctx.respond("This command retrieves an image from an image uploading site where people unkowingly upload the screenshot they take to the 'cloud', this is completely legal ( i checked ).")
+        while running:
+        
+            await ctx.respond("Getting your screenshot...")
+        
+            name = await RandomScreenshotGetter.screenshotGetter().get(location=(f"{location}data/"))
+        
+            try:
+            
+                await ctx.respond("Here's your random screenshot ( type 'other: help' for more info ) ", file=discord.File(fp=f"{location}data/screenshot{name}.png"))   
+                running = False
+            
+        
+            except(Exception):
+                await ctx.respond("Oops...something happened...")
+        
+        
+            try:
+                os.remove(f"{location}data/screenshot{name}.png")
+            except(FileNotFoundError):
+                pass
+    else:
+        return
+
+@screenshot.error
+async def screenshot_error(ctx, error):
     ctx.respond(f"ERROR: ```\n {error} \n```")
 
 with open(f"{location}data/token.txt" , "r") as token:
