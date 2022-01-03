@@ -1,9 +1,12 @@
-import os
-import discord
-from discord.ext import commands
 import asyncio
-import sys
+from datetime import datetime
+import threading
 import os
+import sys
+import asyncio
+import discord
+from discord.channel import TextChannel
+from discord.ext import commands
 
 screenshot_channel = ""
 command_channel = ""
@@ -26,6 +29,8 @@ client = commands.Bot()
 @client.event
 async def on_ready():
     print(f"\n{client.user.display_name} has risen !!!!!!")
+    
+    
 
 @client.slash_command(guild_ids=[int(guild_id)], name= "state" , description="Everything to do with the computer's state.")
 async def state(ctx, option : str, * , time_sec : int = None):
@@ -60,8 +65,9 @@ async def state_error(ctx, error):
 
 @client.slash_command(guild_ids=[int(guild_id)], name= "screenshot", descriptSion = "get's a random screenshot")
 async def screenshot(ctx, other : str = None):
-    import RandomScreenshotGetter
     import os
+
+    import RandomScreenshotGetter
     if str(ctx.channel.id) == screenshot_channel:
         running = None
         if other is None:
@@ -96,6 +102,97 @@ async def screenshot(ctx, other : str = None):
 async def screenshot_error(ctx, error):
     ctx.respond(f"ERROR: ```\n {error} \n```")
 
+@client.slash_command(guild_ids=[int(guild_id) ], name="apps" , description = "open or close apps")
+async def appOpener(ctx, app: str, option : str  = None ):
+    if option is not None:
+        option = option.replace('\\' , '/')
+    if str(ctx.channel.id) == command_channel:
+        if app.lower() == "help":
+            await ctx.respond("```\n osu - opens osu \n discord - opens discord \n steam - opens steam \n chrome - opens chrome ; option : <url> \n code - opens visual studio code ; option: <project name or location>\n minecraft - opens minecraft \n roblox - opens roblox \n ```")
+        if app.lower() == "osu":
+            if option is None:
+                os.system("start C:/Users/trool/AppData/Local/osu!/osu!.exe" )
+                await ctx.respond(f"Done. {app} has been opened")
+            elif option == "close":
+                os.system("taskkill /IM osu!.exe")
+                await ctx.respond(f"Done. {app} has been closed")
+        elif app.lower() == "discord":
+            if option is None:
+                os.system("start C:/Users/trool/AppData/Local/Discord/app-1.0.9003\Discord.exe" )
+                await ctx.respond(f"Done. {app} has been opened")
+            elif option == "close":
+                closed = False
+                for _ in range(10):
+                    try:
+                        os.system("taskkill /IM /T Discord.exe")
+                        closed = True
+                    except(Exception):
+                        pass
+                if closed:
+                    await ctx.respond(f"Done. {app} has been closed")
+        elif app.lower() == "steam":
+            if option is None:
+                os.system("start C:/Program Files (x86)/Steam/steam.exe" )
+                await ctx.respond(f"Done. {app} has been opened")
+            elif option == "close":
+                os.system("taskkill /IM steam.exe ")
+                await ctx.respond(f"Done. {app} has been closed")
+        elif app.lower() == "chrome":
+            import webbrowser
+            if option == None:
+                webbrowser.open()
+                await ctx.respond(f"Done. {app} has been opened")
+            elif option  == "close":
+                os.system("taskkill /IM chrome.exe")
+                await ctx.respond(f"Done. {app} has been closed")
+            elif option != None:
+                webbrowser.open(option)
+                await ctx.respond(f"Done. {app} has been opened")
+        elif app.lower() == "code":
+            if option == None:
+                os.system("code")
+                await ctx.respond(f"Done. {app} has been opened")
+            if option == "close":
+                os.system("taskkill /IM Code.exe")
+                await ctx.respond(f"Done. {app} has been closed")
+            elif option != None:
+              try:
+                if "c:" in option.lower() :
+                    os.system(f"code {option}  " )
+                elif "d:" in option.lower() :
+                    os.system(f"code {option}  " )
+                elif "e:" in option.lower():
+                    os.system(f"code {option}  " )
+                else:
+                    os.system(f"code C:/Users/trool/OneDrive/Documents/{option}/")
+              except(FileNotFoundError):
+                  await ctx.respond("Seems like file doesn't exist")
+              await ctx.respond(f"Done. {app} has been opened")
+        elif app.lower() == "minecraft":
+            if option is None:
+                os.system(f"start C:/Program Files/Badlion Client/Badlion Client.exe")
+                await ctx.respond(f"Done. {app} has been opened")
+            elif option == "close":
+                os.system(f"taskkill /IM Badlion Client.exe")
+                await ctx.respond(f"Done. {app} has been closed")
+        elif app.lower() == "roblox":
+            if option is None:
+                import webbrowser
+                webbrowser.open("www.roblox.com")
+                await ctx.respond(f"Done. {app} has been opened")
+            if option == "close":
+                os.system(f"taskkill /IM chrome.exe /F")
+                os.system(f"taskkill /IM RobloxPlayerLauncher.exe /F")
+                os.system(f"taskkill /IM RobloxPlayerBeta.exe /F")
+                await ctx.respond(f"Done. {app} has been closed")
+
+
+
+        
+        
 with open(f"{location}data/token.txt" , "r") as token:
+
     client.run((token.read()).strip())
     token.close()
+
+
