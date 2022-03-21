@@ -6,10 +6,8 @@ __pycache__/
 # C extensionss
 *.so
 #ignore data files
-token.txt
-guild_id.txt
-command_channel_id.txt
-screenshot_channel_id.txt
+mainData.json
+programs.json
 # Distribution / packaging
 .Python
 build/
