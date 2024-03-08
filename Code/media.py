@@ -1,6 +1,8 @@
 from pynput.keyboard import Controller, KeyCode, Key
 import time
 
+#each key pressed is a special windows macro key for windows
+
 class media:
     def __init__(self):
         self.keyboard = Controller()
